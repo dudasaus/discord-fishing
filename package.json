@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "npx nodemon index.js",
-    "register": "node commands.js"
+    "register": "node commands.js",
+    "ngrok": "ngrok start discord-fishing"
   },
   "author": "",
   "license": "ISC",
