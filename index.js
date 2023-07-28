@@ -29,8 +29,6 @@ async function startApp() {
   app.post("/interactions", async function (req, res) {
     // Interaction type and data
     const { type, id, data, member } = req.body;
-    const user = member.user;
-
     /**
      * Handle verification requests
      */
@@ -44,6 +42,7 @@ async function startApp() {
      */
     if (type === InteractionType.APPLICATION_COMMAND) {
       const { name } = data;
+      const user = member.user;
 
       if (name === "fish") {
         const username = user.global_name;

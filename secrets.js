@@ -7,7 +7,7 @@ async function getSecrets() {
     // If we're in GCP, grab secrets from the secret manager.
     const client = new SecretManagerServiceClient();
     const [version] = await client.accessSecretVersion({
-      name: "projects/582436714904/secrets/discord_secrets",
+      name: "projects/582436714904/secrets/discord_secrets/versions/1",
     });
     const payload = version.payload?.data?.toString();
     if (!payload) {
