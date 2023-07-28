@@ -27,9 +27,8 @@ app.use(
 
 app.post("/interactions", async function (req, res) {
   // Interaction type and data
-  const { type, id, data } = req.body;
-
-  console.log(req.body);
+  const { type, id, data, member } = req.body;
+  const user = member.user;
 
   /**
    * Handle verification requests
@@ -45,22 +44,26 @@ app.post("/interactions", async function (req, res) {
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
 
-    // "test" command
-    if (name === "test") {
-      // Send a message into the channel where command was triggered from
+    if (name === "fish") {
+      const username = user.global_name;
+      const content = `${username} went fishing and caught... ${getFish()}`;
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          // Fetches a random emoji to send from a helper function
-          content: "hello world",
+          content,
         },
       });
     }
   }
 
-  return res.status(500).send("Sever error");
+  return res.status(404).send("Command not found.");
 });
 
 app.listen(PORT, () => {
   console.log("Listening on port", PORT);
 });
+
+function getFish() {
+  const fish = ["🐟", "🐠", "🐡", "🦈", "🦐", "🦀", "🦞", "🐬", "🐋"];
+  return fish[Math.floor(Math.random() * fish.length)];
+}

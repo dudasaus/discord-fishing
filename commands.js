@@ -1,13 +1,13 @@
 import "dotenv/config";
 import { InstallGlobalCommands } from "./utils.js";
 
-// Simple test command
-const TEST_COMMAND = {
-  name: "test",
-  description: "Basic command",
+// Fish command
+const FISH_COMMAND = {
+  name: "fish",
+  description: "Go fishing",
   type: 1,
 };
 
-const ALL_COMMANDS = [TEST_COMMAND];
+const ALL_COMMANDS = [FISH_COMMAND];
 
 InstallGlobalCommands(process.env.DISCORD_APP_ID, ALL_COMMANDS);
