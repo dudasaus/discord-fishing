@@ -124,6 +124,7 @@ async function checkLimit(username) {
   const snapshot = await firestore
     .collection(CATCHES_COLLECTION)
     .where("timestamp", ">", today())
+    .where("username", "==", username)
     .count()
     .get();
   if (snapshot.data().count) {
