@@ -45,12 +45,16 @@ async function startApp() {
       const user = member.user;
       const displayName = member.nick || user.global_name || user.username;
 
-      if (name === "fish") {
+      const matchName = (actual, expected) => {
+        return actual == expected || actual == `dev-${expected}`;
+      };
+
+      if (matchName(name, "fish")) {
         const fish = getFish();
         const content = `${displayName} went fishing and caught... ${fish}`;
         logInfo({
           action: "fishing",
-          username,
+          username: user.username,
           fish,
         });
         return res.send({

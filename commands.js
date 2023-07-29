@@ -31,5 +31,4 @@ const appId = prod
 const token = prod ? process.env.PROD_DISCORD_TOKEN : process.env.DISCORD_TOKEN;
 const commands = prod ? ALL_COMMANDS : ALL_COMMANDS_DEV;
 
-console.log(commands);
-// InstallGlobalCommands(appId, commands, token);
+InstallGlobalCommands(appId, commands, token);
