@@ -6,6 +6,7 @@ import { getSecrets } from "./secrets.js";
 import { logInfo } from "./logging.js";
 
 const PORT = process.env.PORT || 3000;
+const VERSION = process.env.GAE_VERSION || "local";
 
 const app = express();
 
@@ -16,6 +17,7 @@ async function startApp() {
     res
       .json({
         message: "Ok",
+        version: VERSION,
       })
       .send();
   });
@@ -71,6 +73,7 @@ async function startApp() {
   });
 
   app.listen(PORT, () => {
+    console.log("Version started:", VERSION);
     console.log("Listening on port", PORT);
   });
 }
