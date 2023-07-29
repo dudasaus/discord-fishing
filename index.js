@@ -43,11 +43,11 @@ async function startApp() {
     if (type === InteractionType.APPLICATION_COMMAND) {
       const { name } = data;
       const user = member.user;
+      const displayName = member.nick || user.global_name || user.username;
 
       if (name === "fish") {
-        const username = user.global_name;
         const fish = getFish();
-        const content = `${username} went fishing and caught... ${fish}`;
+        const content = `${displayName} went fishing and caught... ${fish}`;
         logInfo({
           action: "fishing",
           username,
