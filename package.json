@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/firestore": "^6.7.0",
     "@google-cloud/logging": "^10.5.0",
     "@google-cloud/secret-manager": "^4.2.2",
     "discord-interactions": "^3.4.0",
