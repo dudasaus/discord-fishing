@@ -7,6 +7,7 @@
     "start": "node index.js",
     "dev": "npx nodemon index.js",
     "register": "node commands.js",
+    "register-prod": "node commands.js --prod",
     "ngrok": "ngrok start discord-fishing"
   },
   "author": "",
@@ -20,6 +21,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "commander": "^11.0.0",
     "nodemon": "^3.0.1"
   }
 }
