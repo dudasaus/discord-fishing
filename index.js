@@ -94,6 +94,10 @@ async function startApp() {
           },
         });
       }
+
+      if (matchName(name, "catches")) {
+        return getCatches(user.username, req, res);
+      }
     }
 
     logInfo({ msg: "Bad intreactions requst" });
@@ -136,6 +140,45 @@ async function checkLimit(username) {
   return {
     allowed: true,
   };
+}
+
+async function getCatches(username, req, res) {
+  const snapshot = await firestore
+    .collection(CATCHES_COLLECTION)
+    .where("username", "==", username)
+    .orderBy("timestamp", "asc")
+    .get();
+
+  // No fish!
+  if (snapshot.size == 0) {
+    return res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: "You don't have any fish! Try `/fish`.",
+      },
+    });
+  } else {
+    let catches = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const date = new Date(data.timestamp);
+      catches.push({
+        fish: data.fish,
+        timestamp: date.toLocaleString(),
+      });
+    });
+    let content = `Your catches:`;
+    for (let i = catches.length - 1; i >= 0; i--) {
+      const myCatch = catches[i];
+      content += `\n${myCatch.fish} - ${myCatch.timestamp}`;
+    }
+    return res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content,
+      },
+    });
+  }
 }
 
 startApp();
