@@ -4,7 +4,6 @@ import { VerifyDiscordRequest, getDiscordRequestInfo } from "./discord_utils";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
-import { timeUntilTomorrow, today } from "./date_utils";
 import { advancedFishingCommand } from "./commands/advanced_fishing";
 import { firestore, CATCHES_COLLECTION, canYouFishRightNow } from "./firestore";
 
