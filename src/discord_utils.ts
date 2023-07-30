@@ -31,12 +31,12 @@ export interface DiscordRequestInfo {
 export function getDiscordRequestInfo(
   req: express.Request
 ): DiscordRequestInfo {
-  const { type, data, member } = req.body;
+  const { type, data, member, guild } = req.body;
   const commandName = data.name;
   const { user } = member;
   const { username } = user;
   const displayName = member.nick || user.global_name || user.username;
-  const guildId = data.guild_id;
+  const guildId = guild.id;
   const userId = user.id;
 
   return {

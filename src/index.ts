@@ -4,20 +4,14 @@ import { VerifyDiscordRequest, getDiscordRequestInfo } from "./discord_utils";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
-import { Firestore } from "@google-cloud/firestore";
 import { timeUntilTomorrow, today } from "./date_utils";
 import { advancedFishingCommand } from "./commands/advanced_fishing";
+import { firestore, CATCHES_COLLECTION } from "./firestore";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
-const CATCHES_COLLECTION = process.env.GAE_APPLICATION
-  ? "prod-catches"
-  : "dev-catches";
 
 const app = express();
-const firestore = new Firestore({
-  projectId: "discord-fishing",
-});
 
 async function startApp() {
   const secrets = await getSecrets();
