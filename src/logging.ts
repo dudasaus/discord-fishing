@@ -6,7 +6,7 @@ const defaultLog = env["GAE_ENV"] ? "prod" : "local";
 
 const logging = new Logging({ projectId });
 
-function logInfo(message) {
+function logInfo(message: {} | string) {
   console.log(message);
   const log = logging.log(defaultLog);
   const metadata = {

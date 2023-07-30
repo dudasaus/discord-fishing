@@ -1,11 +1,11 @@
 import "dotenv/config";
 import express from "express";
-import { VerifyDiscordRequest } from "./utils.js";
+import { VerifyDiscordRequest } from "./discord_utils";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
-import { getSecrets } from "./secrets.js";
-import { logInfo } from "./logging.js";
+import { getSecrets } from "./secrets";
+import { logInfo } from "./logging";
 import { Firestore } from "@google-cloud/firestore";
-import { timeUntilTomorrow, today } from "./date_utils.js";
+import { timeUntilTomorrow, today } from "./date_utils";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -38,7 +38,7 @@ async function startApp() {
 
   app.post("/interactions", async function (req, res) {
     // Interaction type and data
-    const { type, id, data, member } = req.body;
+    const { type, data, member } = req.body;
     /**
      * Handle verification requests
      */
@@ -60,7 +60,7 @@ async function startApp() {
         return res.status(400).send("Go away");
       }
 
-      const matchName = (actual, expected) => {
+      const matchName = (actual: string, expected: string) => {
         return actual == expected || actual == `dev-${expected}`;
       };
 
@@ -115,7 +115,7 @@ function getFish() {
   return fish[Math.floor(Math.random() * fish.length)];
 }
 
-async function recordCatch(username, fish) {
+async function recordCatch(username: string, fish: string) {
   const doc = firestore.collection(CATCHES_COLLECTION).doc();
   await doc.set({
     username,
@@ -124,7 +124,7 @@ async function recordCatch(username, fish) {
   });
 }
 
-async function checkLimit(username) {
+async function checkLimit(username: string) {
   const snapshot = await firestore
     .collection(CATCHES_COLLECTION)
     .where("timestamp", ">", today())
@@ -142,7 +142,11 @@ async function checkLimit(username) {
   };
 }
 
-async function getCatches(username, req, res) {
+async function getCatches(
+  username: string,
+  _req: express.Request,
+  res: express.Response
+) {
   const snapshot = await firestore
     .collection(CATCHES_COLLECTION)
     .where("username", "==", username)
@@ -158,7 +162,7 @@ async function getCatches(username, req, res) {
       },
     });
   } else {
-    let catches = [];
+    let catches: Array<{ fish: string; timestamp: string }> = [];
     snapshot.forEach((doc) => {
       const data = doc.data();
       const date = new Date(data.timestamp);

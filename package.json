@@ -2,10 +2,10 @@
   "name": "discord-fishing",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "npx nodemon index.js",
+    "build": "bash ./build.sh",
+    "start": "node serverDist/index.js",
+    "dev": "node dev.js",
     "register": "node commands.js",
     "register-prod": "node commands.js --prod",
     "ngrok": "ngrok start discord-fishing"
@@ -21,9 +21,10 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2"
   },
-  "type": "module",
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "commander": "^11.0.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "typescript": "^5.1.6"
   }
 }

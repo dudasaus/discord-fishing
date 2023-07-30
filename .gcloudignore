@@ -26,7 +26,12 @@
 .gitignore
 .env
 sample_request.js
+references/
 
 # Node.js dependencies:
 
 node_modules/
+
+# Built server
+
+serverDist/
