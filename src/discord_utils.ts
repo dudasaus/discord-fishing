@@ -24,6 +24,8 @@ export interface DiscordRequestInfo {
   commandName: string;
   displayName: string;
   username: string;
+  userId: string;
+  guildId: string;
 }
 
 export function getDiscordRequestInfo(
@@ -34,11 +36,15 @@ export function getDiscordRequestInfo(
   const { user } = member;
   const { username } = user;
   const displayName = member.nick || user.global_name || user.username;
+  const guildId = data.guild_id;
+  const userId = user.id;
 
   return {
     type,
     commandName,
     displayName,
     username,
+    userId,
+    guildId,
   };
 }

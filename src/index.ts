@@ -38,8 +38,8 @@ async function startApp() {
   );
 
   app.post("/interactions", async function (req, res) {
-    // Interaction type and data
-    const { type, data, member } = req.body;
+    // Interaction type.
+    const { type } = req.body;
     /**
      * Handle verification requests
      */
