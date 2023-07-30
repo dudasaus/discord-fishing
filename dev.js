@@ -3,6 +3,7 @@
  */
 const { spawn } = require("node:child_process");
 const { exit, cwd } = require("node:process");
+const kill = require("tree-kill");
 
 const commands = [
   { command: "bash", options: ["npx", "tsc", "--watch"] },
@@ -31,4 +32,13 @@ for (let x of commands) {
     pid: subprocess.pid,
     command: [x.command, ...x.options].join(" "),
   });
+
+  subprocesses.push(subprocess);
 }
+
+process.on("SIGINT", () => {
+  subprocesses.forEach((p) => {
+    console.log(`Killing PID ${p.pid}`);
+    kill(p.pid);
+  });
+});
