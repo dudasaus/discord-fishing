@@ -12,7 +12,11 @@ export interface Fish {
   weight: number;
 }
 
-function createFishConfig(emoji, sizeFn, weightFn): FishConfig {
+function createFishConfig(
+  emoji: string,
+  sizeFn: () => number,
+  weightFn: () => number
+): FishConfig {
   return {
     emoji,
     sizeFn,

@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express from "express";
-import { VerifyDiscordRequest } from "./discord_utils";
+import { VerifyDiscordRequest, getDiscordRequestInfo } from "./discord_utils";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
 import { Firestore } from "@google-cloud/firestore";
 import { timeUntilTomorrow, today } from "./date_utils";
+import { advancedFishingCommand } from "./commands/advanced_fishing";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -51,12 +52,14 @@ async function startApp() {
      * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
      */
     if (type === InteractionType.APPLICATION_COMMAND) {
-      const { name } = data;
-      const user = member.user;
-      const displayName = member.nick || user.global_name || user.username;
+      const discordInfo = getDiscordRequestInfo(req);
 
       // Don't let the homies hit dev.
-      if (!process.env.GAE_APPLICATION && user.username != "chillydudas") {
+      if (
+        !process.env.GAE_APPLICATION &&
+        discordInfo.username != "chillydudas"
+      ) {
+        console.log(discordInfo.username, "tried to hit dev.");
         return res.status(400).send("Go away");
       }
 
@@ -64,8 +67,8 @@ async function startApp() {
         return actual == expected || actual == `dev-${expected}`;
       };
 
-      if (matchName(name, "fish")) {
-        const canFish = await checkLimit(user.username);
+      if (matchName(discordInfo.commandName, "fish")) {
+        const canFish = await checkLimit(discordInfo.username);
         if (!canFish.allowed) {
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -76,14 +79,14 @@ async function startApp() {
         }
 
         const fish = getFish();
-        const content = `${displayName} went fishing and caught... ${fish}`;
+        const content = `${discordInfo.displayName} went fishing and caught... ${fish}`;
         logInfo({
           action: "fishing",
-          username: user.username,
+          username: discordInfo.username,
           fish,
         });
 
-        recordCatch(user.username, fish).catch((err) => {
+        recordCatch(discordInfo.username, fish).catch((err) => {
           console.error("Error recording catch in db", err);
         });
 
@@ -95,8 +98,12 @@ async function startApp() {
         });
       }
 
-      if (matchName(name, "catches")) {
-        return getCatches(user.username, req, res);
+      if (matchName(discordInfo.commandName, "catches")) {
+        return getCatches(discordInfo.username, req, res);
+      }
+
+      if (matchName(discordInfo.commandName, "advanced-fish")) {
+        return advancedFishingCommand(req, res, discordInfo);
       }
     }
 

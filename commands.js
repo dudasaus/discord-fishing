@@ -24,7 +24,13 @@ const CATCHES_COMMAND = {
   type: 1,
 };
 
-const ALL_COMMANDS = [FISH_COMMAND, CATCHES_COMMAND];
+const ADVANCED_FISH_COMMAND = {
+  name: "advanced-fish",
+  description: "New and improved fishing",
+  type: 1,
+};
+
+const ALL_COMMANDS = [FISH_COMMAND, CATCHES_COMMAND, ADVANCED_FISH_COMMAND];
 const ALL_COMMANDS_DEV = ALL_COMMANDS.map((command) => {
   const devCommand = { ...command };
   devCommand.name = `dev-${command.name}`;
