@@ -6,7 +6,7 @@ import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
 import { timeUntilTomorrow, today } from "./date_utils";
 import { advancedFishingCommand } from "./commands/advanced_fishing";
-import { firestore, CATCHES_COLLECTION } from "./firestore";
+import { firestore, CATCHES_COLLECTION, canYouFishRightNow } from "./firestore";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -62,7 +62,7 @@ async function startApp() {
       };
 
       if (matchName(discordInfo.commandName, "fish")) {
-        const canFish = await checkLimit(discordInfo.username);
+        const canFish = await canYouFishRightNow(discordInfo.username);
         if (!canFish.allowed) {
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -123,24 +123,6 @@ async function recordCatch(username: string, fish: string) {
     fish,
     timestamp: Date.now(),
   });
-}
-
-async function checkLimit(username: string) {
-  const snapshot = await firestore
-    .collection(CATCHES_COLLECTION)
-    .where("timestamp", ">", today())
-    .where("username", "==", username)
-    .count()
-    .get();
-  if (snapshot.data().count) {
-    return {
-      allowed: false,
-      message: `You already fished today! You can fish again in ${timeUntilTomorrow()}`,
-    };
-  }
-  return {
-    allowed: true,
-  };
 }
 
 async function getCatches(
