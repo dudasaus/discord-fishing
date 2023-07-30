@@ -1,14 +1,14 @@
 {
   "name": "discord-fishing",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord fishing bot.",
   "scripts": {
-    "build": "bash ./build.sh",
     "start": "node serverDist/index.js",
+    "build": "bash ./build.sh",
     "dev": "node dev.js",
+    "ngrok": "ngrok start discord-fishing",
     "register": "node commands.js",
-    "register-prod": "node commands.js --prod",
-    "ngrok": "ngrok start discord-fishing"
+    "register-prod": "node commands.js --prod"
   },
   "author": "",
   "license": "ISC",
