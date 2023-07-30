@@ -5,7 +5,7 @@ import { formatFish } from "../format_utils";
 import { DiscordRequestInfo } from "../discord_utils";
 import { canYouFishRightNow, recordCatch } from "../firestore";
 
-export async function advancedFishingCommand(
+export async function fishingCommand(
   _req: express.Request,
   res: express.Response,
   info: DiscordRequestInfo

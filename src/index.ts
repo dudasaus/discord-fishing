@@ -4,8 +4,8 @@ import { VerifyDiscordRequest, getDiscordRequestInfo } from "./discord_utils";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
-import { advancedFishingCommand } from "./commands/advanced_fishing";
-import { firestore, CATCHES_COLLECTION, canYouFishRightNow } from "./firestore";
+import { fishingCommand } from "./commands/fish";
+import { firestore, CATCHES_COLLECTION } from "./firestore";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -61,42 +61,11 @@ async function startApp() {
       };
 
       if (matchName(discordInfo.commandName, "fish")) {
-        const canFish = await canYouFishRightNow(discordInfo.username);
-        if (!canFish.allowed) {
-          return res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: canFish.message,
-            },
-          });
-        }
-
-        const fish = getFish();
-        const content = `${discordInfo.displayName} went fishing and caught... ${fish}`;
-        logInfo({
-          action: "fishing",
-          username: discordInfo.username,
-          fish,
-        });
-
-        recordCatch(discordInfo.username, fish).catch((err) => {
-          console.error("Error recording catch in db", err);
-        });
-
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content,
-          },
-        });
+        return fishingCommand(req, res, discordInfo);
       }
 
       if (matchName(discordInfo.commandName, "catches")) {
         return getCatches(discordInfo.username, req, res);
-      }
-
-      if (matchName(discordInfo.commandName, "advanced-fish")) {
-        return advancedFishingCommand(req, res, discordInfo);
       }
     }
 
@@ -107,20 +76,6 @@ async function startApp() {
   app.listen(PORT, () => {
     console.log("Version started:", VERSION);
     console.log("Listening on port", PORT);
-  });
-}
-
-function getFish() {
-  const fish = ["🐟", "🐠", "🐡", "🦈", "🦐", "🦀", "🦞", "🐬", "🐋"];
-  return fish[Math.floor(Math.random() * fish.length)];
-}
-
-async function recordCatch(username: string, fish: string) {
-  const doc = firestore.collection(CATCHES_COLLECTION).doc();
-  await doc.set({
-    username,
-    fish,
-    timestamp: Date.now(),
   });
 }
 
