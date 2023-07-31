@@ -24,7 +24,17 @@ const CATCHES_COMMAND = {
   type: 1,
 };
 
-const ALL_COMMANDS = [FISH_COMMAND, CATCHES_COMMAND];
+const SERVER_LEADERBOARD_COMMAND = {
+  name: "server-fishing-leaderboard",
+  description: "View the biggest catches on this server",
+  type: 1,
+};
+
+const ALL_COMMANDS = [
+  FISH_COMMAND,
+  CATCHES_COMMAND,
+  SERVER_LEADERBOARD_COMMAND,
+];
 const ALL_COMMANDS_DEV = ALL_COMMANDS.map((command) => {
   const devCommand = { ...command };
   devCommand.name = `dev-${command.name}`;

@@ -6,6 +6,7 @@ import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
 import { fishingCommand } from "./commands/fish";
 import { getCatches } from "./commands/catches";
+import { serverSizeLeaderboard } from "./commands/server_size_leaderboard";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -67,9 +68,13 @@ async function startApp() {
       if (matchName(discordInfo.commandName, "catches")) {
         return getCatches(discordInfo.username, req, res);
       }
+
+      if (matchName(discordInfo.commandName, "server-fishing-leaderboard")) {
+        return serverSizeLeaderboard(req, res, discordInfo);
+      }
     }
 
-    logInfo({ msg: "Bad intreactions requst" });
+    logInfo({ msg: "Bad intreactions request" });
     return res.status(404).send("Command not found.");
   });
 
