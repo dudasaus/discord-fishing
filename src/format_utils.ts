@@ -6,7 +6,7 @@ function round(input: number) {
 }
 
 /** Formats a weight (g) to grams/kilograms. */
-function formatWeight(weight: number) {
+export function formatWeight(weight: number) {
   if (weight > 1000) {
     return round(weight / 1000) + " kg";
   } else {
@@ -15,7 +15,7 @@ function formatWeight(weight: number) {
 }
 
 /** Formats a length (in) to feet/inches. */
-function formatLength(length: number) {
+export function formatLength(length: number) {
   const feet = Math.floor(length / 12);
   const inches = round(length % 12);
   if (feet) {
