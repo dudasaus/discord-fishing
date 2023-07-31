@@ -5,7 +5,7 @@ import { InteractionType, InteractionResponseType } from "discord-interactions";
 import { getSecrets } from "./secrets";
 import { logInfo } from "./logging";
 import { fishingCommand } from "./commands/fish";
-import { firestore, CATCHES_COLLECTION } from "./firestore";
+import { getCatches } from "./commands/catches";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -77,49 +77,6 @@ async function startApp() {
     console.log("Version started:", VERSION);
     console.log("Listening on port", PORT);
   });
-}
-
-async function getCatches(
-  username: string,
-  _req: express.Request,
-  res: express.Response
-) {
-  const snapshot = await firestore
-    .collection(CATCHES_COLLECTION)
-    .where("username", "==", username)
-    .orderBy("timestamp", "asc")
-    .get();
-
-  // No fish!
-  if (snapshot.size == 0) {
-    return res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: "You don't have any fish! Try `/fish`.",
-      },
-    });
-  } else {
-    let catches: Array<{ fish: string; timestamp: string }> = [];
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      const date = new Date(data.timestamp);
-      catches.push({
-        fish: data.fish,
-        timestamp: date.toLocaleString(),
-      });
-    });
-    let content = `Your catches:`;
-    for (let i = catches.length - 1; i >= 0; i--) {
-      const myCatch = catches[i];
-      content += `\n${myCatch.fish} - ${myCatch.timestamp}`;
-    }
-    return res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content,
-      },
-    });
-  }
 }
 
 startApp();
