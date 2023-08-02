@@ -30,10 +30,17 @@ const SERVER_LEADERBOARD_COMMAND = {
   type: 1,
 };
 
+const GLOBAL_LEADERBOARD_COMMAND = {
+  name: "global-fishing-leaderboard",
+  description: "View the biggest catches ever",
+  type: 1,
+};
+
 const ALL_COMMANDS = [
   FISH_COMMAND,
   CATCHES_COMMAND,
   SERVER_LEADERBOARD_COMMAND,
+  GLOBAL_LEADERBOARD_COMMAND,
 ];
 const ALL_COMMANDS_DEV = ALL_COMMANDS.map((command) => {
   const devCommand = { ...command };
