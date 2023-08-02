@@ -8,6 +8,7 @@ import { fishingCommand } from "./commands/fish";
 import { getCatches } from "./commands/catches";
 import { serverSizeLeaderboard } from "./commands/server_size_leaderboard";
 import { globalSizeLeaderboard } from "./commands/global_size_leaderboard";
+import { testDropRates } from "./fish";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -24,6 +25,14 @@ async function startApp() {
         version: VERSION,
       })
       .send();
+  });
+
+  app.get("/droprates/:numSims", (req, res) => {
+    const numSims = Math.floor(Number(req.params.numSims));
+    if (isNaN(numSims) || numSims < 1 || numSims > 10000) {
+      return res.status(400).send("numSims must be a number in [1, 10000]");
+    }
+    res.json(testDropRates(numSims)).send();
   });
 
   app.use(
