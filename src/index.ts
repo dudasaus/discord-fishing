@@ -80,7 +80,6 @@ async function startApp() {
       }
 
       if (matchName(discordInfo.commandName, "fishing-leaderboard")) {
-        console.log(req.body.data.options);
         const leaderboard = discordInfo.options["leaderboard"];
         if (!leaderboard) {
           return res.status(400).send("Missing leaderboard options");
