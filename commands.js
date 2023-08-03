@@ -24,6 +24,30 @@ const CATCHES_COMMAND = {
   type: 1,
 };
 
+const LEADERBOARD_COMMAND = {
+  name: "fishing-leaderboard",
+  description: "View the biggest catches",
+  type: 1,
+  options: [
+    {
+      type: 3, // STRING
+      name: "leaderboard",
+      description: "Which leaderboard to load",
+      required: true,
+      choices: [
+        {
+          name: "Server",
+          value: "server",
+        },
+        {
+          name: "Global",
+          value: "global",
+        },
+      ],
+    },
+  ],
+};
+
 const SERVER_LEADERBOARD_COMMAND = {
   name: "server-fishing-leaderboard",
   description: "View the biggest catches on this server",
@@ -41,6 +65,7 @@ const ALL_COMMANDS = [
   CATCHES_COMMAND,
   SERVER_LEADERBOARD_COMMAND,
   GLOBAL_LEADERBOARD_COMMAND,
+  LEADERBOARD_COMMAND,
 ];
 const ALL_COMMANDS_DEV = ALL_COMMANDS.map((command) => {
   const devCommand = { ...command };

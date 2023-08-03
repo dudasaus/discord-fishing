@@ -79,6 +79,21 @@ async function startApp() {
         return getCatches(discordInfo.username, req, res);
       }
 
+      if (matchName(discordInfo.commandName, "fishing-leaderboard")) {
+        console.log(req.body.data.options);
+        const leaderboard = discordInfo.options["leaderboard"];
+        if (!leaderboard) {
+          return res.status(400).send("Missing leaderboard options");
+        }
+        if (leaderboard === "server") {
+          return serverSizeLeaderboard(req, res, discordInfo);
+        }
+        if (leaderboard === "global") {
+          return globalSizeLeaderboard(req, res, discordInfo);
+        }
+        return res.status(400).send("Invalid leaderboard option");
+      }
+
       if (matchName(discordInfo.commandName, "server-fishing-leaderboard")) {
         return serverSizeLeaderboard(req, res, discordInfo);
       }

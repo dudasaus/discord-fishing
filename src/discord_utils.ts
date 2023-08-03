@@ -26,6 +26,7 @@ export interface DiscordRequestInfo {
   username: string;
   userId: string;
   guildId: string;
+  options: Record<string, number | string>;
 }
 
 export function getDiscordRequestInfo(
@@ -39,6 +40,14 @@ export function getDiscordRequestInfo(
   const guildId = guild.id;
   const userId = user.id;
 
+  const { options } = data;
+  const optionsMap: Record<string, number | string> = {};
+  if (options) {
+    for (let option of options) {
+      optionsMap[option.name] = option.value;
+    }
+  }
+
   return {
     type,
     commandName,
@@ -46,5 +55,6 @@ export function getDiscordRequestInfo(
     username,
     userId,
     guildId,
+    options: optionsMap,
   };
 }
