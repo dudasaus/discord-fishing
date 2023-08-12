@@ -9,6 +9,7 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

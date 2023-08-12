@@ -9,6 +9,7 @@ import { getCatches } from "./commands/catches";
 import { serverSizeLeaderboard } from "./commands/server_size_leaderboard";
 import { globalSizeLeaderboard } from "./commands/global_size_leaderboard";
 import { testDropRates } from "./fish";
+import { webRouter } from "./web/router";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -34,6 +35,8 @@ async function startApp() {
     }
     res.json(testDropRates(numSims)).send();
   });
+
+  app.use(webRouter);
 
   app.use(
     express.json({

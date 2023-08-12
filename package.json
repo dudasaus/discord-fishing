@@ -19,7 +19,8 @@
     "d3": "6.7.0",
     "discord-interactions": "^3.4.0",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "preact-render-to-string": "^6.2.1"
   },
   "devDependencies": {
     "@types/d3": "6.7.0",
