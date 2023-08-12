@@ -7,6 +7,16 @@ const kill = require("tree-kill");
 
 const commands = [
   { command: "bash", options: ["npx", "tsc", "--watch"] },
+  {
+    command: "bash",
+    options: [
+      "npx",
+      "sass",
+      "--watch",
+      "./src/web/index.scss",
+      "./serverDist/static/index.css",
+    ],
+  },
   { command: "bash", options: ["npx", "nodemon"] },
 ];
 
