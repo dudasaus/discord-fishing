@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { Home } from "./home";
+import { Home } from "./views/home/home";
 import render from "preact-render-to-string";
 
 const webRouter = Router();

@@ -1,0 +1,24 @@
+/** Common styles, functions, and mixins. */
+@use "sass:math";
+@use "./colors.scss";
+
+/**
+ * Device independent pixels. See
+ * https://en.wikipedia.org/wiki/Device-independent_pixel
+ */
+@function dp($pixels) {
+  @return math.div($pixels * 1rem, 16);
+}
+
+@mixin button() {
+  text-decoration: none;
+  color: colors.$white;
+  background-color: colors.$blurple;
+  font-weight: 500;
+  letter-spacing: dp(1);
+  padding: dp(4) dp(8);
+  border-radius: 4px;
+  &:hover {
+    background-color: darken(colors.$blurple, 5%);
+  }
+}
