@@ -21,9 +21,13 @@
 
   .actions {
     margin-top: common.dp(32);
+    * + * {
+      margin-left: common.dp(16);
+    }
   }
 
-  .install-button {
+  .install-button,
+  .login-button {
     @include common.button();
     font-size: common.dp(24);
   }
