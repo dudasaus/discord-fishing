@@ -35,75 +35,83 @@ async function startApp() {
     res.json(testDropRates(numSims)).send();
   });
 
-  app.use(
-    express.json({
-      verify: VerifyDiscordRequest(secrets.DISCORD_PUBLIC_KEY),
-    })
-  );
+  app.use("/", express.static("./serverDist/static"));
 
-  app.post("/interactions", async function (req, res) {
-    // Interaction type.
-    const { type } = req.body;
-    /**
-     * Handle verification requests
-     */
-    if (type === InteractionType.PING) {
-      return res.send({ type: InteractionResponseType.PONG });
-    }
+  const verifyDiscordRequestMiddleware = express.json({
+    verify: VerifyDiscordRequest(secrets.DISCORD_PUBLIC_KEY),
+  });
 
-    /**
-     * Handle slash command requests
-     * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
-     */
-    if (type === InteractionType.APPLICATION_COMMAND) {
-      const discordInfo = getDiscordRequestInfo(req);
-
-      // Don't let the homies hit dev.
-      if (
-        !process.env.GAE_APPLICATION &&
-        discordInfo.username != "chillydudas"
-      ) {
-        console.log(discordInfo.username, "tried to hit dev.");
-        return res.status(400).send("Go away");
+  app.post(
+    "/interactions",
+    verifyDiscordRequestMiddleware,
+    async function (req, res) {
+      // Interaction type.
+      const { type } = req.body;
+      /**
+       * Handle verification requests
+       */
+      if (type === InteractionType.PING) {
+        return res.send({ type: InteractionResponseType.PONG });
       }
 
-      const matchName = (actual: string, expected: string) => {
-        return actual == expected || actual == `dev-${expected}`;
-      };
+      /**
+       * Handle slash command requests
+       * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
+       */
+      if (type === InteractionType.APPLICATION_COMMAND) {
+        const discordInfo = getDiscordRequestInfo(req);
 
-      if (matchName(discordInfo.commandName, "fish")) {
-        return fishingCommand(req, res, discordInfo);
-      }
-
-      if (matchName(discordInfo.commandName, "catches")) {
-        return getCatches(discordInfo.username, req, res);
-      }
-
-      if (matchName(discordInfo.commandName, "fishing-leaderboard")) {
-        const leaderboard = discordInfo.options["leaderboard"];
-        if (!leaderboard) {
-          return res.status(400).send("Missing leaderboard options");
+        // Don't let the homies hit dev.
+        if (
+          !process.env.GAE_APPLICATION &&
+          discordInfo.username != "chillydudas"
+        ) {
+          console.log(discordInfo.username, "tried to hit dev.");
+          return res.status(400).send("Go away");
         }
-        if (leaderboard === "server") {
+
+        const matchName = (actual: string, expected: string) => {
+          return actual == expected || actual == `dev-${expected}`;
+        };
+
+        if (matchName(discordInfo.commandName, "fish")) {
+          return fishingCommand(req, res, discordInfo);
+        }
+
+        if (matchName(discordInfo.commandName, "catches")) {
+          return getCatches(discordInfo.username, req, res);
+        }
+
+        if (matchName(discordInfo.commandName, "fishing-leaderboard")) {
+          const leaderboard = discordInfo.options["leaderboard"];
+          if (!leaderboard) {
+            return res.status(400).send("Missing leaderboard options");
+          }
+          if (leaderboard === "server") {
+            return serverSizeLeaderboard(req, res, discordInfo);
+          }
+          if (leaderboard === "global") {
+            return globalSizeLeaderboard(req, res, discordInfo);
+          }
+          return res.status(400).send("Invalid leaderboard option");
+        }
+
+        if (matchName(discordInfo.commandName, "server-fishing-leaderboard")) {
           return serverSizeLeaderboard(req, res, discordInfo);
         }
-        if (leaderboard === "global") {
+
+        if (matchName(discordInfo.commandName, "global-fishing-leaderboard")) {
           return globalSizeLeaderboard(req, res, discordInfo);
         }
-        return res.status(400).send("Invalid leaderboard option");
       }
 
-      if (matchName(discordInfo.commandName, "server-fishing-leaderboard")) {
-        return serverSizeLeaderboard(req, res, discordInfo);
-      }
-
-      if (matchName(discordInfo.commandName, "global-fishing-leaderboard")) {
-        return globalSizeLeaderboard(req, res, discordInfo);
-      }
+      logInfo({ msg: "Bad intreactions request" });
+      return res.status(404).send("Command not found.");
     }
+  );
 
-    logInfo({ msg: "Bad intreactions request" });
-    return res.status(404).send("Command not found.");
+  app.all("*", (_req, res) => {
+    res.status(404).send("Not found");
   });
 
   app.listen(PORT, () => {

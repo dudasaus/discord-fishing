@@ -16,5 +16,5 @@
     "outDir": "./serverDist",
     "allowJs": true
   },
-  "include": ["src/index.ts"]
+  "include": ["src/index.ts", "src/ui"]
 }
