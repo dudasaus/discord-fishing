@@ -5,6 +5,10 @@ function Page(props: { body: preact.JSX.Element }) {
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="./static/index.css" />
+        <link
+          rel="icon"
+          href="https://fonts.gstatic.com/s/e/notoemoji/latest/1f419/512.webp"
+        />
         <title>Discord Fishing</title>
       </head>
       <body>{props.body}</body>
@@ -17,3 +21,10 @@ function renderPage(el: preact.JSX.Element) {
 }
 
 export { Page, renderPage };
+
+{
+  /* <picture>
+  <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f419/512.webp" type="image/webp">
+  <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f419/512.gif" alt="🐙" width="32" height="32">
+</picture> */
+}
