@@ -9,6 +9,7 @@ function Home(props: { username: string }) {
         <a
           className={"install-button"}
           href="https://discord.com/api/oauth2/authorize?client_id=892529887271854130&permissions=2048&scope=bot%20applications.commands"
+          target="_blank"
         >
           Install
         </a>
