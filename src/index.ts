@@ -111,7 +111,7 @@ async function startApp() {
   );
 
   app.all("*", (_req, res) => {
-    res.status(404).send("Not found");
+    return res.status(404).send("Not found");
   });
 
   app.listen(PORT, () => {
