@@ -10,6 +10,12 @@ console.log(import.meta.env);
 function App() {
   const [count, setCount] = useAtom(countAtom);
 
+  async function testFetch() {
+    const res = await fetch("/api/leaderboard");
+    const parsed = await res.json();
+    console.log(parsed);
+  }
+
   return (
     <>
       <div>
@@ -26,7 +32,7 @@ function App() {
           count is {count}
         </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR! Key:
+          <button onClick={() => testFetch()}>Fetch</button>
         </p>
       </div>
       <p className="read-the-docs">

@@ -9,6 +9,7 @@ import { getCatches } from "./commands/catches";
 import { serverSizeLeaderboard } from "./commands/server_size_leaderboard";
 import { globalSizeLeaderboard } from "./commands/global_size_leaderboard";
 import { testDropRates } from "./fish";
+import { getGlobalLeaderboard } from "./firestore";
 
 const PORT = process.env.PORT || 3000;
 const VERSION = process.env.GAE_VERSION || "local";
@@ -33,6 +34,15 @@ async function startApp() {
       return res.status(400).send("numSims must be a number in [1, 10000]");
     }
     res.json(testDropRates(numSims)).send();
+  });
+
+  app.get("/api/leaderboard", async (_req, res) => {
+    try {
+      const globalLeaderboard = await getGlobalLeaderboard();
+      return res.json(globalLeaderboard);
+    } catch (_err) {
+      res.status(500).send("Error loading leaderboard");
+    }
   });
 
   app.use("/", express.static("./serverDist/static"));
