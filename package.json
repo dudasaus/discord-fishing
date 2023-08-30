@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node serverDist/index.js",
     "build": "bash ./build.sh",
+    "gcp-build": "bash ./build.sh",
     "dev": "node dev.js",
     "ngrok": "ngrok start discord-fishing",
     "register": "node commands.js",
