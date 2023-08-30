@@ -36,9 +36,13 @@ async function startApp() {
     res.json(testDropRates(numSims)).send();
   });
 
-  app.get("/api/leaderboard", async (_req, res) => {
+  app.get("/api/leaderboard", async (req, res) => {
+    const querySize = Math.floor(Number(req.query.size));
+    const validQuerySize =
+      !isNaN(querySize) && querySize > 0 && querySize <= 100;
+    const size = validQuerySize ? querySize : 50;
     try {
-      const globalLeaderboard = await getGlobalLeaderboard();
+      const globalLeaderboard = await getGlobalLeaderboard(size);
       return res.json(globalLeaderboard);
     } catch (_err) {
       res.status(500).send("Error loading leaderboard");
