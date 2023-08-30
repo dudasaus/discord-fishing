@@ -1,9 +1,6 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.scss";
-import { useAtom } from "jotai";
-import { countAtom } from "./atoms";
 import React, { useEffect, useState } from "react";
+import { formatLength } from "../format_utils";
 
 console.log(import.meta.env);
 
@@ -26,7 +23,7 @@ function App() {
       <ol>
         {leaderboard.map((entry) => (
           <li>
-            {entry.username} - {entry.fish}
+            {entry.username} - {entry.fish}, {formatLength(entry.size)}
           </li>
         ))}
       </ol>

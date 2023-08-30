@@ -15,8 +15,9 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "./serverDist",
     "allowJs": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["vite/client"]
     // "composite": true
   },
-  "include": ["src/ui"]
+  "include": ["src/ui", "vite.config.ts"]
 }
