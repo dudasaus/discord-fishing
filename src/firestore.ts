@@ -50,3 +50,13 @@ export async function canYouFishRightNow(username: string): Promise<{
     allowed: true,
   };
 }
+
+/** Grabs global leaderboard. */
+export async function getGlobalLeaderboard(size = 10): Promise<Array<any>> {
+  const snapshot = await firestore
+    .collection(CATCHES_COLLECTION)
+    .orderBy("size", "desc")
+    .limit(size)
+    .get();
+  return snapshot.docs.map((doc) => doc.data());
+}

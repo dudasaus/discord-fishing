@@ -7,6 +7,18 @@ const kill = require("tree-kill");
 
 const commands = [
   { command: "bash", options: ["npx", "tsc", "--watch"] },
+  {
+    command: "bash",
+    options: [
+      "npx",
+      "vite",
+      "build",
+      "--watch",
+      "--sourcemap",
+      "--mode",
+      "development",
+    ],
+  },
   { command: "bash", options: ["npx", "nodemon"] },
 ];
 

@@ -3,7 +3,7 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "CommonJS",
+    "module": "ES2020",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -15,8 +15,9 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "./serverDist",
     "allowJs": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["vite/client"]
+    // "composite": true
   },
-  "include": ["src/index.ts"]
-  // "references": [{ "path": "./tsconfig.vite.json" }]
+  "include": ["src/ui", "vite.config.ts"]
 }
