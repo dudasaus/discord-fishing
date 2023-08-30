@@ -1,3 +1,3 @@
 #!/bin/bash
 npx tsc
-vite build
+npx vite build
