@@ -15,12 +15,14 @@ export const firestore = new Firestore({
 /** Saves a catch in the firestore database. */
 export async function recordCatch(
   username: string,
+  userId: string,
   guildId: string,
   fish: Fish
 ) {
   const doc = firestore.collection(CATCHES_COLLECTION).doc();
   await doc.set({
     username,
+    userId,
     guildId,
     fish: fish.emoji,
     size: fish.size,
@@ -30,14 +32,15 @@ export async function recordCatch(
 }
 
 /** Checks if the user is allowed to fish right now. */
-export async function canYouFishRightNow(username: string): Promise<{
+export async function canYouFishRightNow(userId: string): Promise<{
   allowed: boolean;
   message?: string;
 }> {
   const snapshot = await firestore
     .collection(CATCHES_COLLECTION)
     .where("timestamp", ">", today())
-    .where("username", "==", username)
+    .where("userId", "==", userId)
+    .orderBy("timestamp", "desc")
     .count()
     .get();
   if (snapshot.data().count) {

@@ -11,7 +11,7 @@ export async function fishingCommand(
   info: DiscordRequestInfo
 ) {
   // Check if the player is allowed to fish.
-  const wellCanYou = await canYouFishRightNow(info.username);
+  const wellCanYou = await canYouFishRightNow(info.userId);
   if (!wellCanYou.allowed) {
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -27,7 +27,7 @@ export async function fishingCommand(
   content += formatFish(fish);
 
   // Save the catch in the database.
-  recordCatch(info.username, info.guildId, fish).catch((err) => {
+  recordCatch(info.username, info.userId, info.guildId, fish).catch((err) => {
     console.error(err);
   });
 
