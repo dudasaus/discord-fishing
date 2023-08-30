@@ -17,16 +17,31 @@ function App() {
       });
   }, []);
 
+  function formatDate(timestamp: number): string {
+    return new Date(timestamp).toLocaleDateString();
+  }
+
   function renderLeaderboard() {
     if (loading) return <p>Loading...</p>;
     return (
-      <ol>
-        {leaderboard.map((entry) => (
-          <li>
-            {entry.username} - {entry.fish}, {formatLength(entry.size)}
-          </li>
+      <table className="leaderboard">
+        <tr>
+          <th>Pos</th>
+          <th>User</th>
+          <th>Catch</th>
+          <th>Size</th>
+          <th>Date</th>
+        </tr>
+        {leaderboard.map((entry, pos) => (
+          <tr>
+            <td>{pos + 1}</td>
+            <td>{entry.username}</td>
+            <td>{entry.fish}</td>
+            <td>{formatLength(entry.size)}</td>
+            <td>{formatDate(entry.timestamp)}</td>
+          </tr>
         ))}
-      </ol>
+      </table>
     );
   }
 

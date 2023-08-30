@@ -1,0 +1,13 @@
+.leaderboard {
+  border-collapse: collapse;
+  min-width: 40dvw;
+  tr {
+    height: 32px;
+    td:first-of-type {
+      padding-left: 8px;
+    }
+  }
+  tr:nth-child(even) {
+    background-color: rgba(white, 0.1);
+  }
+}
