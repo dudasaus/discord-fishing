@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./serverDist/index.js",
     "build": "bash ./build.sh",
-    "gcp-build": "bash ./build.sh",
+    "gcp-build": "npx tsc && npx vite build",
     "clean": "rm -rf ./serverDist",
     "dev": "node dev.js",
     "ngrok": "ngrok start discord-fishing",
