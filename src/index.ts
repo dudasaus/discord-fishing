@@ -20,12 +20,10 @@ async function startApp() {
   const secrets = await getSecrets();
 
   app.get("/test", (_, res) => {
-    res
-      .json({
-        message: "Ok",
-        version: VERSION,
-      })
-      .send();
+    res.json({
+      message: "Ok",
+      version: VERSION,
+    });
   });
 
   app.get("/droprates/:numSims", (req, res) => {
@@ -33,7 +31,7 @@ async function startApp() {
     if (isNaN(numSims) || numSims < 1 || numSims > 10000) {
       return res.status(400).send("numSims must be a number in [1, 10000]");
     }
-    res.json(testDropRates(numSims)).send();
+    res.json(testDropRates(numSims));
   });
 
   app.get("/api/leaderboard", async (req, res) => {
