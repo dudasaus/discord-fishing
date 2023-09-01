@@ -1,6 +1,7 @@
 import "./App.scss";
 import React, { useEffect, useState } from "react";
 import { formatLength } from "../format_utils";
+import { Header } from "./shared/header/header";
 
 console.log(import.meta.env);
 
@@ -47,7 +48,7 @@ function App() {
 
   return (
     <>
-      <h1>Discord Fishing Leaderboard</h1>
+      <Header />
       {renderLeaderboard()}
     </>
   );
