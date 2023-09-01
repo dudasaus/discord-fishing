@@ -1,19 +1,12 @@
+@use "font";
+@use "colors";
+
 @import url("https://fonts.googleapis.com/css2?family=Caprasimo&family=Fira+Sans:wght@400;500&family=Kirang+Haerang&display=swap");
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  color: colors.$black;
+  background-color: colors.$white;
 }
 
 h1,
@@ -22,6 +15,9 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Kirang Haerang", Impact, Haettenschweiler, "Arial Narrow Bold",
-    sans-serif;
+  font-family: font.$family-fun;
+}
+
+.blurple {
+  color: colors.$blurple;
 }

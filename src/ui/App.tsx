@@ -2,6 +2,7 @@ import "./App.scss";
 import React, { useEffect, useState } from "react";
 import { formatLength } from "../format_utils";
 import { Header } from "./shared/header/header";
+import { HomeView } from "./views/home/home";
 
 console.log(import.meta.env);
 
@@ -48,7 +49,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <HomeView />
       {renderLeaderboard()}
     </>
   );

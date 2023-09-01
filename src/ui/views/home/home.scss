@@ -1,0 +1,20 @@
+@use "font";
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  .panel-1 {
+    padding-left: 64px;
+    .main-point {
+      font-family: font.$family-fun;
+      font-size: 72px;
+      margin: 15dvh 0 0;
+      line-height: 0.8em;
+      max-width: 490px;
+    }
+    .sub-point {
+      font-family: font.$family-fun;
+      font-size: 40px;
+    }
+  }
+}
