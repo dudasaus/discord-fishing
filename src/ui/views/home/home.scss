@@ -1,10 +1,21 @@
 @use "font";
+@use "common";
+@use "colors";
 
 .home-grid {
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template: "p1 p2" auto / 50% 50%;
+  @include common.respond-to("mobile-large") {
+    grid-template:
+      "p1" auto
+      "p2" auto / auto;
+  }
   .panel-1 {
-    padding-left: 64px;
+    grid-area: p1;
+    padding: 0 common.dp(8) 0 common.dp(64);
+    @include common.respond-to("mobile-xsmall") {
+      padding: 0 common.dp(8);
+    }
     .main-point {
       font-family: font.$family-fun;
       font-size: 72px;
@@ -16,5 +27,22 @@
       font-family: font.$family-fun;
       font-size: 40px;
     }
+  }
+  .panel-2 {
+    grid-area: p2;
+  }
+}
+
+.link-button {
+  text-decoration: none;
+  color: colors.$white;
+  background-color: colors.$blurple;
+  padding: common.dp(8) common.dp(12);
+  border-radius: 4px;
+  font-size: common.dp(20);
+  letter-spacing: 1px;
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: colors.$darker-blurple;
   }
 }
