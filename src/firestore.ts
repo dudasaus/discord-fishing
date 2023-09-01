@@ -64,11 +64,32 @@ export async function getGlobalLeaderboard(size = 10): Promise<Array<any>> {
   return snapshot.docs.map((doc) => doc.data());
 }
 
-export async function getCatchesForUser(userId: string): Promise<Array<any>> {
-  const snapshot = await firestore
+export async function getRecentCatchesForUser(
+  userId: string,
+  limit = 5
+): Promise<Array<any>> {
+  let query = firestore
     .collection(CATCHES_COLLECTION)
     .where("userId", "==", userId)
-    .orderBy("timestamp", "desc")
-    .get();
+    .orderBy("timestamp", "desc");
+  if (limit > 1) {
+    query = query.limit(Math.floor(limit));
+  }
+  const snapshot = await query.get();
+  return snapshot.docs.map((doc) => doc.data());
+}
+
+export async function getBiggestCatchesForUser(
+  userId: string,
+  limit = 5
+): Promise<Array<any>> {
+  let query = firestore
+    .collection(CATCHES_COLLECTION)
+    .where("userId", "==", userId)
+    .orderBy("size", "desc");
+  if (limit > 1) {
+    query = query.limit(Math.floor(limit));
+  }
+  const snapshot = await query.get();
   return snapshot.docs.map((doc) => doc.data());
 }
