@@ -91,7 +91,7 @@ async function startApp() {
         }
 
         if (matchName(discordInfo.commandName, "catches")) {
-          return getCatches(discordInfo.username, req, res);
+          return getCatches(discordInfo.userId, req, res);
         }
 
         if (matchName(discordInfo.commandName, "fishing-leaderboard")) {

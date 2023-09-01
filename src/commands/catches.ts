@@ -1,21 +1,17 @@
 import express from "express";
-import { CATCHES_COLLECTION, firestore } from "../firestore";
 import { InteractionResponseType } from "discord-interactions";
 import { formatLength, formatWeight } from "../format_utils";
+import { getCatchesForUser } from "../firestore";
 
 export async function getCatches(
-  username: string,
+  userId: string,
   _req: express.Request,
   res: express.Response
 ) {
-  const snapshot = await firestore
-    .collection(CATCHES_COLLECTION)
-    .where("username", "==", username)
-    .orderBy("timestamp", "asc")
-    .get();
+  const dbCatches = await getCatchesForUser(userId);
 
   // No fish!
-  if (snapshot.size == 0) {
+  if (dbCatches.length == 0) {
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
@@ -29,8 +25,7 @@ export async function getCatches(
       size?: number;
       weight?: number;
     }> = [];
-    snapshot.forEach((doc) => {
-      const data = doc.data();
+    dbCatches.forEach((data) => {
       const date = new Date(data.timestamp);
       catches.push({
         fish: data.fish,
@@ -40,8 +35,7 @@ export async function getCatches(
       });
     });
     let content = `Your catches:`;
-    for (let i = catches.length - 1; i >= 0; i--) {
-      const myCatch = catches[i];
+    for (let myCatch of catches) {
       let stats = "";
       if (myCatch.size || myCatch.weight) {
         stats = "(";

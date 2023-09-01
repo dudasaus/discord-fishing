@@ -63,3 +63,12 @@ export async function getGlobalLeaderboard(size = 10): Promise<Array<any>> {
     .get();
   return snapshot.docs.map((doc) => doc.data());
 }
+
+export async function getCatchesForUser(userId: string): Promise<Array<any>> {
+  const snapshot = await firestore
+    .collection(CATCHES_COLLECTION)
+    .where("userId", "==", userId)
+    .orderBy("timestamp", "desc")
+    .get();
+  return snapshot.docs.map((doc) => doc.data());
+}
