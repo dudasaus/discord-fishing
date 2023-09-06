@@ -86,6 +86,12 @@ const ALL_THE_FISH: FishConfig[] = [
     randomNormal(250000, 75000),
     2
   ),
+  createFishConfig(
+    "🥾",
+    randomNormal(8.65, 0.5),
+    randomNormal(276, 34),
+    1
+  ),
 ];
 
 computeDropRate(ALL_THE_FISH);

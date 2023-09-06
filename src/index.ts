@@ -76,7 +76,7 @@ async function startApp() {
         // Don't let the homies hit dev.
         if (
           !process.env.GAE_APPLICATION &&
-          discordInfo.username != "chillydudas"
+          !["chillydudas", "cdudas17"].includes(discordInfo.username)
         ) {
           console.log(discordInfo.username, "tried to hit dev.");
           return res.status(400).send("Go away");
