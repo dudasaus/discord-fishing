@@ -1,1 +1,3 @@
 runtime: nodejs18
+env_variables:
+  DISCORD_PUBLIC_KEY: "0535e7d76e7cab755d0e147692c16bd88bb18e13b64e310e48ee861089c077af"

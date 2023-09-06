@@ -2,23 +2,28 @@ import { InteractionResponseType } from "discord-interactions";
 import express from "express";
 import { goFishing } from "../fish";
 import { formatFish } from "../format_utils";
-import { DiscordRequestInfo } from "../discord_utils";
+import { DiscordRequestInfo, updateMessage } from "../discord_utils";
 import { canYouFishRightNow, recordCatch } from "../firestore";
 
 export async function fishingCommand(
-  _req: express.Request,
+  req: express.Request,
   res: express.Response,
   info: DiscordRequestInfo
 ) {
+  // Respond immediately.
+  res.send({
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      content: "Trying to fish...",
+    },
+  });
+
+  const { token, application_id } = req.body;
+  console.log({ token, application_id });
   // Check if the player is allowed to fish.
   const wellCanYou = await canYouFishRightNow(info.userId);
   if (!wellCanYou.allowed) {
-    return res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: wellCanYou.message,
-      },
-    });
+    return updateMessage(application_id, token, wellCanYou.message!);
   }
 
   // Go fishing.
@@ -31,10 +36,5 @@ export async function fishingCommand(
     console.error(err);
   });
 
-  return res.send({
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      content,
-    },
-  });
+  return updateMessage(application_id, token, content);
 }

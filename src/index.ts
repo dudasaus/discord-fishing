@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { VerifyDiscordRequest, getDiscordRequestInfo } from "./discord_utils";
 import { InteractionType, InteractionResponseType } from "discord-interactions";
-import { getSecrets } from "./secrets";
+import { getDiscordPublicKey } from "./secrets";
 import { logInfo } from "./logging";
 import { fishingCommand } from "./commands/fish";
 import { getCatches } from "./commands/catches";
@@ -17,8 +17,6 @@ const VERSION = process.env.GAE_VERSION || "local";
 const app = express();
 
 async function startApp() {
-  const secrets = await getSecrets();
-
   app.get("/test", (_, res) => {
     res.json({
       message: "Ok",
@@ -49,8 +47,9 @@ async function startApp() {
 
   app.use("/", express.static("./serverDist/static"));
 
+  const discordPublicKey = await getDiscordPublicKey();
   const verifyDiscordRequestMiddleware = express.json({
-    verify: VerifyDiscordRequest(secrets.DISCORD_PUBLIC_KEY),
+    verify: VerifyDiscordRequest(discordPublicKey),
   });
 
   app.post(

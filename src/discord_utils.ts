@@ -1,3 +1,4 @@
+import axios from "axios";
 import { InteractionType, verifyKey } from "discord-interactions";
 import express from "express";
 
@@ -57,4 +58,16 @@ export function getDiscordRequestInfo(
     guildId,
     options: optionsMap,
   };
+}
+
+// curl -X PATCH -H "Content-Type: application/json" -d '{ "content": "hello" }' https://discord.com/api/webhooks/$appId/$token/messages/@original
+export function updateMessage(
+  appId: string,
+  messageToken: string,
+  content: string
+) {
+  axios.patch(
+    `https://discord.com/api/webhooks/${appId}/${messageToken}/messages/@original`,
+    { content }
+  );
 }
