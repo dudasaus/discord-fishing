@@ -19,7 +19,6 @@ export async function fishingCommand(
   });
 
   const { token, application_id } = req.body;
-  console.log({ token, application_id });
   // Check if the player is allowed to fish.
   const wellCanYou = await canYouFishRightNow(info.userId);
   if (!wellCanYou.allowed) {

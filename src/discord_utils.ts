@@ -1,6 +1,7 @@
 import axios from "axios";
 import { InteractionType, verifyKey } from "discord-interactions";
 import express from "express";
+import { wait } from "./timing_utils";
 
 export function VerifyDiscordRequest(clientKey: string) {
   return function (
@@ -60,14 +61,23 @@ export function getDiscordRequestInfo(
   };
 }
 
-// curl -X PATCH -H "Content-Type: application/json" -d '{ "content": "hello" }' https://discord.com/api/webhooks/$appId/$token/messages/@original
-export function updateMessage(
+export async function updateMessage(
   appId: string,
   messageToken: string,
   content: string
 ) {
-  axios.patch(
-    `https://discord.com/api/webhooks/${appId}/${messageToken}/messages/@original`,
-    { content }
-  );
+  const updateFn = () => {
+    axios.patch(
+      `https://discord.com/api/webhooks/${appId}/${messageToken}/messages/@original`,
+      { content }
+    );
+  };
+  try {
+    await updateFn();
+  } catch (err) {
+    console.error(err);
+    // Retry after 3s.
+    await wait(3000);
+    await updateFn();
+  }
 }
