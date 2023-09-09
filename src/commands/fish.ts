@@ -4,6 +4,7 @@ import { goFishing } from "../fish";
 import { formatFish } from "../format_utils";
 import { DiscordRequestInfo, updateMessage } from "../discord_utils";
 import { canYouFishRightNow, recordCatch } from "../firestore";
+import { wait } from "../timing_utils";
 
 export async function fishingCommand(
   req: express.Request,
@@ -18,10 +19,13 @@ export async function fishingCommand(
     },
   });
 
+  const giveItASecond = wait(1000);
+
   const { token, application_id } = req.body;
   // Check if the player is allowed to fish.
   const wellCanYou = await canYouFishRightNow(info.userId);
   if (!wellCanYou.allowed) {
+    await giveItASecond;
     return updateMessage(application_id, token, wellCanYou.message!);
   }
 
@@ -35,5 +39,8 @@ export async function fishingCommand(
     console.error(err);
   });
 
+  // Make sure at least one second has passed before updating.
+  // This should help avoid 429 errors.
+  await giveItASecond;
   return updateMessage(application_id, token, content);
 }
