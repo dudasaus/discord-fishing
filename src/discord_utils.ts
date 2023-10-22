@@ -66,18 +66,42 @@ export async function updateMessage(
   messageToken: string,
   content: string
 ) {
-  const updateFn = () => {
-    axios.patch(
+  // Retry attempts after N seconds, if needed.
+  const retryAfter = [3, 10, 15];
+  let numRetries = 0;
+  let successfulUpdate = false;
+  const updateFn = async () => {
+    await axios.patch(
       `https://discord.com/api/webhooks/${appId}/${messageToken}/messages/@original`,
       { content }
     );
   };
-  try {
-    await updateFn();
-  } catch (err) {
-    console.error(err);
-    // Retry after 3s.
-    await wait(3000);
-    await updateFn();
+  while (!successfulUpdate && numRetries <= retryAfter.length) {
+    try {
+      await updateFn();
+      if (numRetries) {
+        console.log("Retry succeeded.");
+      }
+      successfulUpdate = true;
+    } catch (err) {
+      if (numRetries < retryAfter.length) {
+        console.warn({
+          retryMessage: `Retry attempt ${numRetries + 1} in ${
+            retryAfter[numRetries]
+          }s.`,
+          err,
+        });
+        await wait(1000 * retryAfter[numRetries]);
+        numRetries++;
+      } else {
+        // You retried enough times, give up :(
+        console.error({
+          retryMessage: `Failed to update message after ${numRetries} retry attempts.`,
+          messageToken,
+          err,
+        });
+        break;
+      }
+    }
   }
 }
